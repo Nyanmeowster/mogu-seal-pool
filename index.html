@@ -4,39 +4,51 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#bcebe8">
+  <meta name="description" content="照顧、餵食與陪伴你的可愛小海豹，打造專屬海豹泳池。">
   <title>MOGU MOGU｜我的海豹泳池</title>
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
   <main class="pet-app">
     <header class="pet-header">
       <div class="pet-brand"><span>●</span><div><small>MOGU MOGU</small><h1>我的海豹泳池</h1></div></div>
-      <div class="coin-pill" aria-label="海豹幣"><span>🪙</span><strong id="coins">1000</strong></div>
+      <div class="header-actions">
+        <button id="sound-toggle" class="sound-toggle" type="button" aria-label="關閉音效" aria-pressed="false"><span aria-hidden="true">🔊</span></button>
+        <div class="coin-pill" aria-label="海豹幣"><span aria-hidden="true">🪙</span><strong id="coins">1000</strong></div>
+      </div>
     </header>
     <section class="status-panel" aria-label="海豹狀態">
-      <div class="status-item"><div class="status-copy"><span>🍙 飽足度</span><strong id="satiety-text">35%</strong></div><div class="meter"><i id="satiety-bar" class="satiety-meter"></i></div></div>
-      <div class="status-item"><div class="status-copy"><span>💗 好感度</span><strong id="affection-text">20%</strong></div><div class="meter"><i id="affection-bar" class="love-meter"></i></div></div>
+      <div id="satiety-status" class="status-item satiety-status"><div class="status-icon" aria-hidden="true">🐟</div><div class="status-main"><div class="status-copy"><span>飽足度</span><strong id="satiety-text">35%</strong></div><div id="satiety-meter" class="meter" role="progressbar" aria-label="飽足度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="35"><i id="satiety-bar" class="satiety-meter"></i></div></div></div>
+      <div id="affection-status" class="status-item affection-status"><div class="status-icon" aria-hidden="true">♥</div><div class="status-main"><div class="status-copy"><span>好感度</span><strong id="affection-text">20%</strong></div><div id="affection-meter" class="meter" role="progressbar" aria-label="好感度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20"><i id="affection-bar" class="love-meter"></i></div></div></div>
     </section>
     <section id="pool" class="pool-scene mode-home" aria-label="小海豹活動區">
-      <div class="sky-glow"></div><div class="pool-rim"></div><div class="water-lines"></div>
+      <div class="sky-glow"></div>
+      <div class="cloud cloud-a"></div><div class="cloud cloud-b"></div>
+      <div class="far-shore"></div><div class="pool-rim"></div>
+      <div class="water-lines"></div><div class="water-caustics"></div>
+      <div class="bubble-field" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      <div id="stage-pill" class="stage-pill">健康體型</div>
       <div id="decorations"></div>
       <div id="speech" class="speech">今天要一起玩什麼？</div>
-      <button id="seal" class="pet-seal stage-2" aria-label="小海豹">
-        <span class="seal-art-wrap"><img id="seal-art" class="stage-art" src="assets/seal-stage-2.webp" alt="可愛的小海豹" draggable="false"><img id="seal-walk-art" class="walk-art" src="assets/seal-stage-2-walk.webp" alt="" draggable="false"></span>
-        <span id="reaction-icon" class="reaction-icon" hidden>♥</span>
-      </button>
+      <div id="seal-roamer" class="seal-roamer stage-2">
+        <button id="seal" class="pet-seal" aria-label="和小海豹互動">
+          <span class="seal-art-wrap"><img id="seal-art" class="stage-art" src="assets/seal-stage-2.webp" alt="可愛的小海豹" draggable="false"><img id="seal-walk-art" class="walk-art" src="assets/seal-stage-2-walk.webp" alt="" draggable="false"></span>
+          <span id="reaction-icon" class="reaction-icon" hidden>♥</span>
+        </button>
+      </div>
       <div id="notice" class="notice" aria-live="polite">歡迎回來～</div>
+      <div class="foreground-water" aria-hidden="true"><i></i><i></i><i></i></div>
     </section>
-    <section id="drawer" class="action-drawer closed"></section>
+    <section id="drawer" class="action-drawer closed" aria-live="polite"></section>
     <nav class="bottom-nav" aria-label="主要功能">
-      <button data-mode="shop"><span>🏠</span><small>小屋</small></button>
-      <button data-mode="pet"><span>🫳</span><small>摸摸</small></button>
-      <button data-mode="feed"><span>🐟</span><small>餵食</small></button>
+      <button data-mode="shop" aria-controls="drawer" aria-expanded="false" aria-pressed="false"><span aria-hidden="true">🏠</span><small>小屋</small></button>
+      <button data-mode="pet" aria-controls="drawer" aria-expanded="false" aria-pressed="false"><span aria-hidden="true">🫳</span><small>摸摸</small></button>
+      <button data-mode="feed" aria-controls="drawer" aria-expanded="false" aria-pressed="false"><span aria-hidden="true">🐟</span><small>餵食</small></button>
     </nav>
-    <div id="dead-overlay" class="dead-overlay" hidden>
-      <div class="dead-card"><span>🕯️</span><small>五天沒有吃東西</small><h2>小海豹永遠睡著了</h2><p>下一次記得常回來看看牠。</p><button id="adopt">迎接新的小海豹</button></div>
+    <div id="dead-overlay" class="dead-overlay" role="dialog" aria-modal="true" aria-labelledby="dead-title" hidden>
+      <div class="dead-card"><span>🕯️</span><small>五天沒有吃東西</small><h2 id="dead-title">小海豹永遠睡著了</h2><p>下一次記得常回來看看牠。</p><button id="adopt">迎接新的小海豹</button></div>
     </div>
   </main>
-  <script src="app.js?v=10"></script>
+  <script src="app.js?v=11"></script>
 </body>
 </html>
