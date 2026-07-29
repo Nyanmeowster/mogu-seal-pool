@@ -3,6 +3,7 @@ const FIVE_DAYS = 432e6;
 const SAVE_KEY = "mogu-pet-v1";
 const ASSET_VERSION = "11";
 const STAT_LOSS_PER_HOUR = 4;
+const PREVIEW_DEAD = new URLSearchParams(location.search).get("preview") === "dead";
 
 const DECOR = [
   { id: "ring", icon: "🍩", name: "甜甜圈泳圈", price: 4, className: "decor-ring" },
@@ -137,8 +138,14 @@ if (starterGift) {
 pet.lastSeenAt = nowAtLoad;
 pet.lastStatAt = nowAtLoad;
 pet.dead = pet.dead || nowAtLoad - pet.lastFedAt >= FIVE_DAYS;
+if (PREVIEW_DEAD) {
+  pet.satiety = 0;
+  pet.affection = 0;
+  pet.dead = true;
+}
 
 function safeSave() {
+  if (PREVIEW_DEAD) return;
   pet.lastSeenAt = Date.now();
   pet.updatedAt = Date.now();
   if (!storageAvailable) return;
@@ -681,6 +688,10 @@ document.querySelectorAll(".bottom-nav button").forEach((button) => {
 
 $("sound-toggle").onclick = toggleSound;
 $("adopt").onclick = () => {
+  if (PREVIEW_DEAD) {
+    location.href = `${location.pathname}?build=12`;
+    return;
+  }
   pet = fresh();
   mode = "home";
   currentStage = 0;
