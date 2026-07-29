@@ -1,6 +1,7 @@
 const HOUR=36e5,FIVE_DAYS=432e6,SAVE_KEY="mogu-pet-v1";
 const DECOR=[{id:"ring",icon:"🍩",name:"甜甜圈泳圈",price:4,className:"decor-ring"},{id:"ball",icon:"🏖️",name:"海灘球",price:7,className:"decor-ball"},{id:"plant",icon:"🌴",name:"迷你椰子樹",price:12,className:"decor-plant"},{id:"light",icon:"✨",name:"星星池燈",price:18,className:"decor-light"}];
 const FOODS=[{icon:"🐟",name:"小魚"},{icon:"🦐",name:"甜蝦"},{icon:"🦑",name:"魷魚"}];
+for(let i=1;i<=5;i++){const image=new Image();image.src=`assets/seal-stage-${i}-pet.webp`}
 const $=id=>document.getElementById(id);
 const fresh=()=>({satiety:35,affection:20,coins:1000,lastFedAt:Date.now(),lastSeenAt:Date.now(),owned:[],active:[],dead:false,starterCoinsGranted:1});
 let pet=fresh(),mode="home",reactionTimer,audio;
@@ -19,9 +20,9 @@ function renderDrawer(){
  d.querySelectorAll("[data-food]").forEach(b=>b.onclick=()=>feed(FOODS[+b.dataset.food]));d.querySelectorAll("[data-decor]").forEach(b=>b.onclick=()=>buy(DECOR[+b.dataset.decor]))
 }
 function sound(kind){audio??=new AudioContext();if(audio.state==="suspended")audio.resume();const now=audio.currentTime,g=audio.createGain(),notes=kind==="eat"?[220,110,520]:kind==="pet"?[520,720]:[700,980];g.connect(audio.destination);notes.forEach((f,i)=>{const o=audio.createOscillator();o.type=i?"sine":"triangle";o.frequency.setValueAtTime(f,now+i*.055);o.connect(g);o.start(now+i*.055);o.stop(now+.12+i*.055)});g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.13,now+.018);g.gain.exponentialRampToValueAtTime(.0001,now+.3)}
-function react(kind,icon){$("seal").classList.remove("eat","pet");void $("seal").offsetWidth;$("seal").classList.add(kind);$("reaction-icon").textContent=icon;$("reaction-icon").hidden=false;clearTimeout(reactionTimer);reactionTimer=setTimeout(()=>{$("reaction-icon").hidden=true;$("seal").classList.remove(kind)},850)}
+function react(kind,icon){$("seal").classList.remove("eat","pet");void $("seal").offsetWidth;$("seal").classList.add(kind);if(kind==="pet")$("seal-art").src=`assets/seal-stage-${stage()}-pet.webp`;$("reaction-icon").textContent=icon;$("reaction-icon").hidden=false;clearTimeout(reactionTimer);reactionTimer=setTimeout(()=>{$("reaction-icon").hidden=true;$("seal").classList.remove(kind);$("seal-art").src=`assets/seal-stage-${stage()}.webp`},1500)}
 function feed(food){if(pet.dead)return;pet.satiety=Math.min(100,pet.satiety+10);pet.affection=Math.min(100,pet.affection+1);pet.lastFedAt=Date.now();$("notice").textContent=`${food.name}吃光光！飽足度 +10%`;react("eat",food.icon);sound("eat");render()}
-function petSeal(){if(pet.dead||mode!=="pet")return;pet.affection=Math.min(100,pet.affection+5);$("notice").textContent="摸摸成功！好感度 +5%";react("pet","♥");sound("pet");render()}
+function petSeal(){if(pet.dead||mode!=="pet")return;pet.affection=Math.min(100,pet.affection+5);$("notice").textContent="摸摸成功！好感度 +5%";render();react("pet","♥");sound("pet")}
 function buy(item){if(pet.owned.includes(item.id)){pet.active=pet.active.includes(item.id)?pet.active.filter(x=>x!==item.id):[...pet.active,item.id];$("notice").textContent=pet.active.includes(item.id)?`擺上${item.name}！`:`收起${item.name}`;render();return}if(pet.coins<item.price){$("notice").textContent="海豹幣不夠，再離線休息一下吧～";return}pet.coins-=item.price;pet.owned.push(item.id);pet.active.push(item.id);$("notice").textContent=`買到${item.name}了！`;sound("coin");render()}
 document.querySelectorAll(".bottom-nav button").forEach(b=>b.onclick=()=>{mode=mode===b.dataset.mode?"home":b.dataset.mode;render()});$("seal").onclick=petSeal;$("adopt").onclick=()=>{pet=fresh();mode="home";$("notice").textContent="新的小海豹來到泳池了，記得照顧牠！";render()};
 setInterval(()=>{if(!pet.dead){pet.satiety=Math.max(0,pet.satiety-(4/60));pet.affection=Math.max(0,pet.affection-(4/60));pet.dead=Date.now()-pet.lastFedAt>=FIVE_DAYS;render()}},6e4);render();
