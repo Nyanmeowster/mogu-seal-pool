@@ -1,7 +1,7 @@
 const HOUR=36e5,FIVE_DAYS=432e6,SAVE_KEY="mogu-pet-v1";
 const DECOR=[{id:"ring",icon:"🍩",name:"甜甜圈泳圈",price:4,className:"decor-ring"},{id:"ball",icon:"🏖️",name:"海灘球",price:7,className:"decor-ball"},{id:"plant",icon:"🌴",name:"迷你椰子樹",price:12,className:"decor-plant"},{id:"light",icon:"✨",name:"星星池燈",price:18,className:"decor-light"}];
 const FOODS=[{icon:"🐟",name:"小魚"},{icon:"🦐",name:"甜蝦"},{icon:"🦑",name:"魷魚"}];
-for(let i=1;i<=5;i++){for(const action of ["pet","eat"]){const image=new Image();image.src=`assets/seal-stage-${i}-${action}.webp`}}
+for(let i=1;i<=5;i++){for(const action of ["pet","eat","walk"]){const image=new Image();image.src=`assets/seal-stage-${i}-${action}.webp`}}
 const $=id=>document.getElementById(id);
 const fresh=()=>({satiety:35,affection:20,coins:1000,lastFedAt:Date.now(),lastSeenAt:Date.now(),owned:[],active:[],dead:false,starterCoinsGranted:1});
 let pet=fresh(),mode="home",reactionTimer,audio;
@@ -10,7 +10,7 @@ function save(){pet.lastSeenAt=Date.now();localStorage.setItem(SAVE_KEY,JSON.str
 function stage(){return pet.satiety<20?1:pet.satiety<40?2:pet.satiety<70?3:pet.satiety<90?4:5}
 function mood(){return pet.dead?"永遠睡著了":pet.satiety<20?"肚子咕嚕咕嚕……":pet.affection>75?"最喜歡你了！":pet.satiety>80?"飽飽的，好幸福～":"今天要一起玩什麼？"}
 function render(){
- const s=stage();$("coins").textContent=Math.floor(pet.coins);$("satiety-text").textContent=`${Math.round(pet.satiety)}%`;$("affection-text").textContent=`${Math.round(pet.affection)}%`;$("satiety-bar").style.width=`${pet.satiety}%`;$("affection-bar").style.width=`${pet.affection}%`;$("speech").textContent=mood();$("seal-art").src=`assets/seal-stage-${s}.webp`;$("seal").classList.forEach(c=>{if(c.startsWith("stage-"))$("seal").classList.remove(c)});$("seal").classList.add(`stage-${s}`);$("pool").className=`pool-scene mode-${mode}`;$("decorations").innerHTML=DECOR.filter(x=>pet.active.includes(x.id)).map(x=>`<span class="pool-decor ${x.className}">${x.icon}</span>`).join("");document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.toggle("active",b.dataset.mode===mode));$("dead-overlay").hidden=!pet.dead;renderDrawer();save()
+ const s=stage();$("coins").textContent=Math.floor(pet.coins);$("satiety-text").textContent=`${Math.round(pet.satiety)}%`;$("affection-text").textContent=`${Math.round(pet.affection)}%`;$("satiety-bar").style.width=`${pet.satiety}%`;$("affection-bar").style.width=`${pet.affection}%`;$("speech").textContent=mood();$("seal-art").src=`assets/seal-stage-${s}.webp`;$("seal-walk-art").src=`assets/seal-stage-${s}-walk.webp`;$("seal").classList.forEach(c=>{if(c.startsWith("stage-"))$("seal").classList.remove(c)});$("seal").classList.add(`stage-${s}`);$("pool").className=`pool-scene mode-${mode}`;$("decorations").innerHTML=DECOR.filter(x=>pet.active.includes(x.id)).map(x=>`<span class="pool-decor ${x.className}">${x.icon}</span>`).join("");document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.toggle("active",b.dataset.mode===mode));$("dead-overlay").hidden=!pet.dead;renderDrawer();save()
 }
 function renderDrawer(){
  const d=$("drawer");d.classList.toggle("closed",mode==="home");if(mode==="home")return;
