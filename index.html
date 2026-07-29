@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#bcebe8">
+  <title>MOGU MOGU｜我的海豹泳池</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="pet-app">
+    <header class="pet-header">
+      <div class="pet-brand"><span>●</span><div><small>MOGU MOGU</small><h1>我的海豹泳池</h1></div></div>
+      <div class="coin-pill" aria-label="海豹幣"><span>🪙</span><strong id="coins">1000</strong></div>
+    </header>
+    <section class="status-panel" aria-label="海豹狀態">
+      <div class="status-item"><div class="status-copy"><span>🍙 飽足度</span><strong id="satiety-text">35%</strong></div><div class="meter"><i id="satiety-bar" class="satiety-meter"></i></div></div>
+      <div class="status-item"><div class="status-copy"><span>💗 好感度</span><strong id="affection-text">20%</strong></div><div class="meter"><i id="affection-bar" class="love-meter"></i></div></div>
+    </section>
+    <section id="pool" class="pool-scene mode-home" aria-label="小海豹活動區">
+      <div class="sky-glow"></div><div class="pool-rim"></div><div class="water-lines"></div>
+      <div id="decorations"></div>
+      <div id="speech" class="speech">今天要一起玩什麼？</div>
+      <button id="seal" class="pet-seal stage-2" aria-label="小海豹">
+        <span class="seal-art-wrap"><img id="seal-art" src="assets/seal-stage-2.webp" alt="可愛的小海豹" draggable="false"></span>
+        <span id="reaction-icon" class="reaction-icon" hidden>♥</span>
+      </button>
+      <div id="notice" class="notice" aria-live="polite">歡迎回來～</div>
+    </section>
+    <section id="drawer" class="action-drawer closed"></section>
+    <nav class="bottom-nav" aria-label="主要功能">
+      <button data-mode="shop"><span>🏠</span><small>小屋</small></button>
+      <button data-mode="pet"><span>🫳</span><small>摸摸</small></button>
+      <button data-mode="feed"><span>🐟</span><small>餵食</small></button>
+    </nav>
+    <div id="dead-overlay" class="dead-overlay" hidden>
+      <div class="dead-card"><span>🕯️</span><small>五天沒有吃東西</small><h2>小海豹永遠睡著了</h2><p>下一次記得常回來看看牠。</p><button id="adopt">迎接新的小海豹</button></div>
+    </div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
