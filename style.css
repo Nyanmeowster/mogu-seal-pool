@@ -577,7 +577,8 @@ button:focus-visible {
 }
 
 .seal-art-wrap,
-.seal-art-wrap img {
+.seal-sprite,
+.seal-action-sprite {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -589,32 +590,43 @@ button:focus-visible {
   transform-origin: 50% 80%;
 }
 
-.seal-art-wrap img {
-  object-fit: contain;
-  object-position: center bottom;
+.seal-sprite,
+.seal-action-sprite {
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: 300% 200%;
   pointer-events: none;
   user-select: none;
 }
 
-.walk-art {
+.seal-sprite {
+  animation: seal-sprite-walk var(--roam-time) steps(1, end) infinite;
+  will-change: background-position;
+}
+
+.seal-action-sprite {
   opacity: 0;
 }
 
-.stage-art {
-  animation: walk-idle-frame var(--roam-time) steps(1, end) infinite;
+.seal-roamer.reacting .seal-art-wrap {
+  animation-play-state: paused;
 }
 
-.walk-art {
-  animation: walk-action-frame var(--roam-time) steps(1, end) infinite;
-}
-
-.seal-roamer.reacting .stage-art,
-.seal-roamer.reacting .walk-art {
-  animation: none;
-}
-
-.seal-roamer.reacting .walk-art {
+.seal-roamer.reacting .seal-sprite {
   opacity: 0;
+  animation-play-state: paused;
+}
+
+.seal-roamer.reacting .seal-action-sprite {
+  opacity: 1;
+}
+
+.pet-seal.eat .seal-action-sprite {
+  animation: seal-sprite-eat 1.38s steps(1, end) both;
+}
+
+.pet-seal.pet .seal-action-sprite {
+  animation: seal-sprite-pet 1.05s steps(1, end) both;
 }
 
 .pet-seal.eat {
@@ -1111,67 +1123,72 @@ button:focus-visible {
   }
 }
 
-@keyframes walk-idle-frame {
+@keyframes seal-sprite-walk {
   0%,
   11%,
+  48%,
+  58%,
+  89%,
+  100% {
+    background-position: 0 0;
+  }
+  11.1%,
   17%,
   24%,
   32%,
   40%,
-  48%,
-  58%,
+  47.9%,
+  58.1%,
   65%,
   73%,
   81%,
-  89%,
-  100% {
-    opacity: 1;
-  }
-  11.1%,
-  16.9%,
-  24.1%,
-  31.9%,
-  40.1%,
-  47.9%,
-  58.1%,
-  64.9%,
-  73.1%,
-  80.9%,
-  81.1%,
   88.9% {
-    opacity: 0;
+    background-position: 50% 0;
+  }
+  14%,
+  20.5%,
+  28%,
+  36%,
+  44%,
+  61.5%,
+  69%,
+  77%,
+  85% {
+    background-position: 100% 0;
   }
 }
 
-@keyframes walk-action-frame {
+@keyframes seal-sprite-eat {
   0%,
-  11%,
-  17%,
-  24%,
-  32%,
-  40%,
-  48%,
-  58%,
-  65%,
-  73%,
-  81%,
-  89%,
-  100% {
-    opacity: 0;
+  13%,
+  36%,
+  59%,
+  82% {
+    background-position: 0 100%;
   }
-  11.1%,
-  16.9%,
-  24.1%,
-  31.9%,
-  40.1%,
-  47.9%,
-  58.1%,
-  64.9%,
-  73.1%,
-  80.9%,
-  81.1%,
-  88.9% {
-    opacity: 1;
+  18%,
+  31%,
+  41%,
+  54%,
+  64%,
+  77%,
+  87%,
+  96% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+@keyframes seal-sprite-pet {
+  0%,
+  100% {
+    background-position: 0 0;
+  }
+  8%,
+  88% {
+    background-position: 100% 100%;
   }
 }
 
@@ -1678,8 +1695,8 @@ button:focus-visible {
   .seal-roamer,
   .seal-art-wrap,
   .pet-seal,
-  .stage-art,
-  .walk-art,
+  .seal-sprite,
+  .seal-action-sprite,
   .water-lines,
   .water-caustics,
   .bubble-field i,
@@ -1693,12 +1710,16 @@ button:focus-visible {
     transform: none !important;
   }
 
-  .stage-art {
-    opacity: 1 !important;
+  .seal-sprite {
+    background-position: 0 0 !important;
   }
 
-  .walk-art {
-    display: none !important;
+  .pet-seal.eat .seal-action-sprite {
+    background-position: 0 100% !important;
+  }
+
+  .pet-seal.pet .seal-action-sprite {
+    background-position: 100% 100% !important;
   }
 
   .reaction-icon,

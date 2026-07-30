@@ -1,7 +1,7 @@
 const HOUR = 36e5;
 const FIVE_DAYS = 432e6;
 const SAVE_KEY = "mogu-pet-v1";
-const ASSET_VERSION = "11";
+const ASSET_VERSION = "13";
 const STAT_LOSS_PER_HOUR = 4;
 const PREVIEW_DEAD = new URLSearchParams(location.search).get("preview") === "dead";
 
@@ -24,8 +24,8 @@ const STAGE_LABELS = ["", "纖細小海豹", "健康體型", "圓潤體型", "�
 const IDLE_LINES = ["噗嚕～水溫剛剛好", "今天也想和你待在一起", "小海豹正在巡視泳池", "要不要陪我玩一下？"];
 const $ = (id) => document.getElementById(id);
 const clamp = (value, min = 0, max = 100) => Math.min(max, Math.max(min, value));
-const asset = (stageNumber, action = "") =>
-  `assets/seal-stage-${stageNumber}${action ? `-${action}` : ""}.webp?v=${ASSET_VERSION}`;
+const spriteAsset = (stageNumber) =>
+  `assets/seal-3d-v1/seal-stage-${stageNumber}-sprite.png?v=${ASSET_VERSION}`;
 
 const fresh = () => {
   const now = Date.now();
@@ -177,19 +177,8 @@ function mood() {
 function preloadStage(stageNumber) {
   if (preloaded.has(stageNumber) || stageNumber < 1 || stageNumber > 5) return;
   preloaded.add(stageNumber);
-  ["", "walk", "eat", "pet"].forEach((action) => {
-    const image = new Image();
-    image.src = asset(stageNumber, action);
-  });
-}
-
-function scheduleNeighborPreload(stageNumber) {
-  const work = () => {
-    preloadStage(stageNumber - 1);
-    preloadStage(stageNumber + 1);
-  };
-  if ("requestIdleCallback" in window) requestIdleCallback(work, { timeout: 1800 });
-  else setTimeout(work, 500);
+  const image = new Image();
+  image.src = spriteAsset(stageNumber);
 }
 
 function setMeterState(id, value) {
@@ -235,8 +224,9 @@ function renderSeal() {
     if (className.startsWith("stage-") && className !== "stage-changing") roamer.classList.remove(className);
   });
   roamer.classList.add(`stage-${nextStage}`);
-  if (!actionActive) $("seal-art").src = asset(nextStage);
-  $("seal-walk-art").src = asset(nextStage, "walk");
+  const nextSpriteImage = `url("${spriteAsset(nextStage)}")`;
+  $("seal-sprite").style.backgroundImage = nextSpriteImage;
+  $("seal-action-sprite").style.backgroundImage = nextSpriteImage;
   $("stage-pill").textContent = STAGE_LABELS[nextStage];
   $("seal").setAttribute(
     "aria-label",
@@ -244,7 +234,6 @@ function renderSeal() {
   );
   currentStage = nextStage;
   preloadStage(nextStage);
-  scheduleNeighborPreload(nextStage);
 }
 
 function renderDrawer(force = false) {
@@ -504,7 +493,6 @@ function react(kind, icon) {
   void seal.offsetWidth;
   seal.classList.add(kind);
   roamer.classList.add("reacting");
-  $("seal-art").src = asset(stage(), kind);
   $("reaction-icon").dataset.kind = kind;
   $("reaction-icon").hidden = false;
   createParticles(kind, icon);
@@ -515,7 +503,6 @@ function react(kind, icon) {
     seal.classList.remove(kind);
     roamer.classList.remove("reacting");
     actionActive = "";
-    $("seal-art").src = asset(stage());
   }, duration);
 }
 
@@ -689,7 +676,7 @@ document.querySelectorAll(".bottom-nav button").forEach((button) => {
 $("sound-toggle").onclick = toggleSound;
 $("adopt").onclick = () => {
   if (PREVIEW_DEAD) {
-    location.href = `${location.pathname}?build=12`;
+    location.href = `${location.pathname}?build=13`;
     return;
   }
   pet = fresh();
