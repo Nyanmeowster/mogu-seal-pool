@@ -585,9 +585,31 @@ button:focus-visible {
   height: 100%;
 }
 
+.seal-three-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: none;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 16px;
+  opacity: 0.98;
+  pointer-events: none;
+}
+
 .seal-art-wrap {
   animation: seal-gait var(--roam-time) ease-in-out infinite;
   transform-origin: 50% 80%;
+}
+
+.seal-art-wrap.using-realtime .seal-sprite,
+.seal-art-wrap.using-realtime .seal-action-sprite {
+  opacity: 0;
+}
+
+.seal-art-wrap.using-realtime .seal-three-canvas {
+  display: block;
 }
 
 .seal-sprite,
@@ -654,6 +676,30 @@ button:focus-visible {
 
 .reaction-icon[data-kind="eat"] {
   animation: bite-reaction 0.9s ease-out forwards;
+}
+
+.reaction-icon[data-zone="head"] {
+  top: 26%;
+  left: 34%;
+  color: #4f80ff;
+}
+
+.reaction-icon[data-zone="cheek"] {
+  top: 33%;
+  left: 46%;
+  color: #c86ed6;
+}
+
+.reaction-icon[data-zone="belly"] {
+  top: 56%;
+  left: 48%;
+  color: #ff6f8a;
+}
+
+.reaction-icon[data-zone="fin"] {
+  top: 66%;
+  left: 24%;
+  color: #3fb4e7;
 }
 
 .effect-particle {

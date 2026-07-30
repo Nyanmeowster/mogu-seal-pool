@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#bcebe8">
   <meta name="description" content="照顧、餵食與陪伴你的可愛小海豹，打造專屬海豹泳池。">
   <title>MOGU MOGU｜我的海豹泳池</title>
-  <link rel="stylesheet" href="style.css?v=13">
+  <link rel="stylesheet" href="style.css?v=19">
 </head>
 <body>
   <main class="pet-app">
@@ -32,7 +32,7 @@
       <div id="speech" class="speech">今天要一起玩什麼？</div>
       <div id="seal-roamer" class="seal-roamer stage-2">
         <button id="seal" class="pet-seal" aria-label="和小海豹互動">
-          <span class="seal-art-wrap"><span id="seal-sprite" class="seal-sprite" aria-hidden="true" style="background-image: url('assets/seal-3d-v1/seal-stage-2-sprite.png?v=13')"></span><span id="seal-action-sprite" class="seal-action-sprite" aria-hidden="true" style="background-image: url('assets/seal-3d-v1/seal-stage-2-sprite.png?v=13')"></span></span>
+          <span class="seal-art-wrap"><span id="seal-sprite" class="seal-sprite" aria-hidden="true" style="background-image: url('assets/seal-3d-v1/seal-stage-2-sprite.png?v=19')"></span><span id="seal-action-sprite" class="seal-action-sprite" aria-hidden="true" style="background-image: url('assets/seal-3d-v1/seal-stage-2-sprite.png?v=19')"></span><canvas id="seal-three-canvas" aria-hidden="true"></canvas></span>
           <span id="reaction-icon" class="reaction-icon" hidden>♥</span>
         </button>
       </div>
@@ -49,6 +49,8 @@
       <div class="dead-card"><span>🕯️</span><small>五天沒有吃東西</small><h2 id="dead-title">小海豹永遠睡著了</h2><p>下一次記得常回來看看牠。</p><button id="adopt">迎接新的小海豹</button></div>
     </div>
   </main>
-  <script src="app.js?v=13"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/three@0.164/build/three.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/three@0.164/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="app.js?v=19" defer></script>
 </body>
 </html>
